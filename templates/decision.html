@@ -1,0 +1,121 @@
+{% extends 'index.html' %}
+
+{% block main %}
+
+<form action="./save/" method="post">
+
+    {% csrf_token %}
+
+    <div class="container">
+                
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-8 mt-5 px-4">
+                <div class="mb-3">
+                    <h2 class="d-flex justify-content-center">Decision</h2>
+                    <textarea class="form-control border border-2 text-center align-middle" rows="3" id="description" placeholder="Describe the situation...">
+                        {{ description.strip }}
+                    </textarea>
+                </div>
+                
+                <input type="submit" value="Save" class="btn btn-primary rounded-3 float-end me-4" id="save" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mt-5 px-4">
+                <h2 class="d-flex justify-content-center">Pros</h2>
+                <ul class="list-group mb-3" id="pros-list">
+                    {% if pros %}
+                        {% for pro in pros %}
+                            <li class="list-group-item pro-item">
+                                <textarea class="form-control border border-0" rows="1">
+                                    {{ pro }}
+                                </textarea>
+                            </li>
+                        {% endfor %}
+                    {% else %}
+                    <li class="list-group-item pro-item">
+                        <textarea class="form-control border border-0" rows="1"></textarea>
+                    </li>
+                    {% endif %}
+                </ul>
+
+                <button class="btn btn-success rounded-3 float-end me-4" id="pros-add">
+                    <strong>Add</strong>
+                </button>
+            </div>
+
+            <div class="col-md-6 mt-5 px-4">
+                <h2 class="d-flex justify-content-center">Cons</h2>
+                <ul class="list-group mb-3" id="cons-list">
+                    {% if cons %}
+                        {% for con in cons %}
+                            <li class="list-group-item con-item">
+                                <textarea class="form-control border border-0" rows="1">
+                                    {{ con }}
+                                </textarea>
+                            </li>
+                        {% endfor %}
+                    {% else %}
+                    <li class="list-group-item con-item">
+                        <textarea class="form-control border border-0" rows="1"></textarea>
+                    </li>
+                    {% endif %}
+                </ul>
+
+                <button class="btn btn-success rounded-3 float-end me-4" id="cons-add">
+                    <strong>Add</strong>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+</form>
+
+
+<template>
+    <li class="list-group-item">
+        <textarea class="form-control border border-0" rows="1"></textarea>
+    </li>
+</template>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        let listItem = document.querySelector('template')
+        
+        // <input type="hidden" id="pros" value="{{ pros|join:'|||' }}"/>
+        // <input type="hidden" id="cons" value="{{ cons|join:'|||' }}"/>
+        // var pros = document.querySelector('#pros').value.split('|||')
+        // var cons = document.querySelector('#cons').value.split('|||')
+        // function updatePros() {
+        //     document.querySelectorAll('.pro-item').map(element => element.value)
+        // }
+
+        document.querySelector('#pros-add').addEventListener('click', (e) => {
+            e.preventDefault();
+            let clone = listItem.content.cloneNode(true);
+            clone.firstElementChild.classList.add('pro-item')
+            // clone.firstElementChild.querySelector('textarea')
+            document.querySelector('#pros-list').append(clone)
+        })
+
+        document.querySelector('#cons-add').addEventListener('click', (e) => {
+            e.preventDefault();
+            let clone = listItem.content.cloneNode(true);
+            clone.firstElementChild.classList.add('con-item')
+            document.querySelector('#cons-list').append(clone)
+        })
+
+
+        // document.querySelector('#save').addEventListener('click', () => {
+        //     let description = document.querySelector('#description').value
+        //     let proItems = document.querySelectorAll('.pro-item > textarea').map(element => element.value)
+        //     let conItems = document.querySelectorAll('.pro-item > textarea').map(element => element.value)
+        // })
+
+    })
+</script>
+
+{% endblock main %}
